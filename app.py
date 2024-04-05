@@ -1,5 +1,6 @@
 import click
 from flask import Flask, render_template, request
+from flask_htpasswd import HtPasswdAuth
 import yaml
 
 from search import Search
@@ -7,6 +8,9 @@ from search import Search
 CONFIG = yaml.safe_load(open("config.yml"))
 
 app = Flask(__name__)
+app.config['FLASK_HTPASSWD_PATH'] = '.htpasswd'
+htpasswd = HtPasswdAuth(app)
+
 es = Search()
 
 iconic_taxa = {
@@ -38,7 +42,8 @@ continent_choices = [
 
 
 @app.get("/")
-def index():
+@htpasswd.required
+def index(user):
     return render_template(
         "index.html",
         continent_choices=continent_choices,
@@ -47,7 +52,8 @@ def index():
 
 
 @app.post("/")
-def handle_search():
+@htpasswd.required
+def handle_search(user):
     query = request.form.get("query", "")
     query_vector = es.get_embedding(query)
 

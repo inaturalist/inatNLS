@@ -7,6 +7,7 @@ elastic-transport==8.13.0
 elasticsearch==8.13.0
 filelock==3.13.3
 Flask==3.0.0
+flask-htpasswd==0.5.0
 fsspec==2024.3.1
 huggingface-hub==0.22.2
 idna==3.6
