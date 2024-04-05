@@ -1,10 +1,9 @@
-es_url: "http://localhost:9200"
+es_url: "http://es:9200"
 es_index_name: "inat-photos-index"
 model_name: "clip-ViT-B-32"
-image_cache_dir: "/data-ssd2/alex/images"
+image_cache_dir: "/app/images"
 insert_batch_size: 200
 
-KNN:
+knn:
   k: 10
   num_candidates: 100
-

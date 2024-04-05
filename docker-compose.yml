@@ -1,0 +1,24 @@
+version: "2"
+services:
+
+  es:
+    container_name: es
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.1
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+  
+  inatnls:
+    container_name: inatnls
+    image: inaturalist/inatnls:latest
+    ports:
+      - 80:5000
+    volumes:
+      - .htpasswd:/app/.htpasswd
+      - app_images_data:/app/images
+
+volumes:
+  es_data:
+  app_images_data:

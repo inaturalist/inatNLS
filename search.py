@@ -18,7 +18,7 @@ CONFIG = yaml.safe_load(open("config.yml"))
 class Search:
     def __init__(self):
         self.model = SentenceTransformer(CONFIG["model_name"])
-        self.es = Elasticsearch("http://localhost:9200")
+        self.es = Elasticsearch(CONFIG["es_url"])
         self.image_cache_path = Path(CONFIG["image_cache_dir"])
         os.makedirs(self.image_cache_path, exist_ok=True)
         client_info = self.es.info()
