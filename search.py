@@ -40,8 +40,44 @@ class Search:
             index=index_name,
             mappings={
                 "properties": {
+                    "ancestry" : {
+                        "type" : "keyword"
+                    },
+                    "continent" : {
+                        "type" : "keyword"
+                    },
+                    "country_name" : {
+                        "type" : "keyword"
+                    },
                     "embedding": {
                         "type": "dense_vector",
+                    },
+                    "extension" : {
+                        "type" : "keyword"
+                    },
+                    "observation_uuid" : {
+                        "type" : "keyword"
+                    },
+                    "observed_on" : {
+                        "type" : "date"
+                    },
+                    "observer_id" : {
+                        "type" : "keyword"
+                    },
+                    "observer_login" : {
+                        "type" : "keyword"
+                    },
+                    "photo_id" : {
+                        "type" : "keyword"
+                    },
+                    "quality_grade" : {
+                        "type" : "keyword"
+                    },
+                    "taxon_id" : {
+                        "type" : "keyword"
+                    },
+                    "taxon_name" : {
+                        "type" : "text"
                     }
                 }
             },

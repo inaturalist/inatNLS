@@ -64,15 +64,15 @@ def handle_search(user):
 
     filters = {"filter": []}
     if taxon_name != "":
-        filters["filter"].append({"term": {"name.keyword": {"value": taxon_name}}})
+        filters["filter"].append({"term": {"name": taxon_name}})
     if login != "":
-        filters["filter"].append({"term": {"observer_login.keyword": {"value": login}}})
+        filters["filter"].append({"term": {"observer_login": login}})
     if continent != "" and continent != "Worldwide":
-        filters["filter"].append({"term": {"continent.keyword": {"value": continent}}})
+        filters["filter"].append({"term": {"continent": continent}})
     if iconic_taxon != "" and iconic_taxon != "None":
         # this is super inefficient but should be fine for a prototype
         filters["filter"].append(
-            {"prefix": {"ancestry.keyword": {"value": iconic_taxon}}}
+            {"prefix": {"ancestry": iconic_taxon}}
         )
 
     results = es.search(
