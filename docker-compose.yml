@@ -9,7 +9,10 @@ services:
       - xpack.security.enabled=false
     volumes:
       - es_data:/usr/share/elasticsearch/data
-  
+    deploy:
+      resources:
+        limits:
+          memory: 6G  
   inatnls:
     container_name: inatnls
     image: inaturalist/inatnls:latest
