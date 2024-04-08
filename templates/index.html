@@ -58,9 +58,11 @@
 <div class="row mb-3">
     {% for result in results %}
     <div class="card" style="width: 12rem;">
-        <img src="https://inaturalist-open-data.s3.amazonaws.com/photos/{{ result._source.photo_id }}/small.{{ result._source.extension }}"
+        <a href="https://www.inaturalist.org/observations/{{ result._source.observation_uuid }}">
+            <img src="https://inaturalist-open-data.s3.amazonaws.com/photos/{{ result._source.photo_id }}/small.{{ result._source.extension }}"
             class="card-img-top img-responsive" alt="..."
             style="width: 100%; max-height: 140px; object-fit: none; object-position: center;" />
+        </a>
         <div class="card-body">
             <small>
                 Taxon Name:
