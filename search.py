@@ -27,11 +27,6 @@ class Search:
         print("Connected to Elasticsearch!")
 
     def get_embedding(self, text):
-        # this is ugly but otherwise pytorch is logging constantly
-        # haven't been able to track down which logger to disable
-        for key in logging.Logger.manager.loggerDict:
-            logging.getLogger(key).disabled = True
-
         return self.model.encode(text)
 
     def delete_index(self, index_name):

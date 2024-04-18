@@ -4,6 +4,7 @@ services:
   es:
     container_name: es
     image: docker.elastic.co/elasticsearch/elasticsearch:8.13.1
+    restart: always
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
@@ -12,15 +13,18 @@ services:
     deploy:
       resources:
         limits:
-          memory: 6G  
+          memory: 6G
+
   inatnls:
     container_name: inatnls
     image: inaturalist/inatnls:latest
+    restart: always
     ports:
       - 80:5000
     volumes:
       - .htpasswd:/app/.htpasswd
       - app_images_data:/app/images
+      - ./logs:/app/logs
 
 volumes:
   es_data:

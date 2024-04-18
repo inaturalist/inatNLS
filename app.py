@@ -2,6 +2,8 @@ import click
 from flask import Flask, render_template, request
 from flask_htpasswd import HtPasswdAuth
 import yaml
+import logging
+from logging.handlers import RotatingFileHandler
 
 from search import Search
 
@@ -10,6 +12,13 @@ CONFIG = yaml.safe_load(open("config.yml"))
 app = Flask(__name__)
 app.config['FLASK_HTPASSWD_PATH'] = '.htpasswd'
 htpasswd = HtPasswdAuth(app)
+
+# Create logger
+file_handler = RotatingFileHandler('./logs/search.log', maxBytes=1024 * 1024 * 100, backupCount=10)
+formatter = logging.Formatter('[%(asctime)s]%(message)s')
+file_handler.setFormatter(formatter)
+app.logger.addHandler(file_handler)
+app.logger.setLevel(logging.INFO)
 
 es = Search()
 
@@ -40,7 +49,6 @@ continent_choices = [
     "South America",
 ]
 
-
 @app.get("/")
 @htpasswd.required
 def index(user):
@@ -50,10 +58,9 @@ def index(user):
         iconic_taxa=iconic_taxa,
     )
 
-
 @app.post("/")
 @htpasswd.required
-def handle_search(user):
+def handle_search(user):    
     query = request.form.get("query", "")
     query_vector = es.get_embedding(query)
 
@@ -74,6 +81,8 @@ def handle_search(user):
         filters["filter"].append(
             {"prefix": {"ancestry": iconic_taxon}}
         )
+
+    app.logger.info(f"[{iconic_taxon}][{login}][{continent}] {query}")
 
     results = es.search(
         index_name=CONFIG["es_index_name"],
