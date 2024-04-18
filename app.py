@@ -111,6 +111,9 @@ def handle_search(user):
         total=results["hits"]["total"]["value"],
     )
 
+@app.get("/status")
+def status():
+    return "nls-demo OK" 
 
 @app.cli.command()
 @click.argument("filename", required=True)
