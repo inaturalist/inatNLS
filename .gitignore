@@ -95,5 +95,6 @@ ENV/
 .vscode/
 
 images/
+models/
 config.yml
 .htpasswd

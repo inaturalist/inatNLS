@@ -1,5 +1,6 @@
 # testing NL search with elastic and iNat data and CLIP
 
+0. download a mediapipe face detector model from google: https://developers.google.com/mediapipe/solutions/vision/face_detector#models - I'm using the BlazeFace (short-range) since that's the only model available at the time of this writing
 1. install elasticsearch and run it. I'm using docker: https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html
 2. make a python venv and activate it
 3. `pip install -r requirements.txt`
