@@ -11,7 +11,6 @@ from esManager import ElasticSearchManager
 from imageManager import ImageManager
 from ingestionService import IngestionService
 from embeddingModel import EmbeddingModel
-from requestFormatter import RequestFormatter
 from searchService import SearchService
 from humanDetectionModel import HumanDetectionModel
 
