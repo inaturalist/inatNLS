@@ -96,3 +96,4 @@ ENV/
 
 images/
 config.yml
+.htpasswd
