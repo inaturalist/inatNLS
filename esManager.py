@@ -21,6 +21,9 @@ class ElasticSearchManager:
                 "properties": {
                     "embedding": {
                         "type": "dense_vector",
+                        "index": True,
+                        "similarity": "cosine",
+                        "dims": 512
                     }
                 }
             },
