@@ -37,7 +37,7 @@ class ElasticSearchManager:
 
     def bulk_insert(self, index_name, documents):
         operations = []
-        operations.append({'index': {'_index': index_name}})
         for document in documents:
+            operations.append({'index': {'_index': index_name}})
             operations.append(document)
         return self.es.bulk(operations=operations)
