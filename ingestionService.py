@@ -29,6 +29,7 @@ class IngestionService:
         with open(data_file) as csvfile:
             csvreader = csv.DictReader(csvfile)
             seen = 0
+            docs = []
             for row in csvreader:
                 seen += 1
 
@@ -46,7 +47,6 @@ class IngestionService:
                         ))
                         continue
                 
-                docs = []
                 try:
                     # exclude photos where we can find a human face
                     if self.human_detection_model.detect_faces(local_path):

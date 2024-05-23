@@ -8,6 +8,7 @@ from config import Config
 from data import iconic_taxa, continent_choices
 from esManager import ElasticSearchManager
 from imageManager import ImageManager
+from ingestionServiceMultiThread import IngestionServiceMultiThread
 from ingestionService import IngestionService
 from embeddingModel import EmbeddingModel
 from searchService import SearchService
