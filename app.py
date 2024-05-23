@@ -22,8 +22,7 @@ def create_app():
     embedding_model = EmbeddingModel(
         app.config["CLIP_MODEL_NAME"]
     )
-    # TODO: pass in ES config from app.config
-    es_manager = ElasticSearchManager()
+    es_manager = ElasticSearchManager(url=app.config["ES_URL"])
     image_manager = ImageManager(cache_dir=app.config["IMAGE_CACHE_DIR"])
     human_detection_model = HumanDetectionModel(
         model_path=app.config["MEDIAPIPE_HUMAN_DETECT_MODEL"],

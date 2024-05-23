@@ -1,10 +1,13 @@
-es_url: "http://es:9200"
-es_index_name: "inat-photos-index"
-model_name: "clip-ViT-B-32"
-image_cache_dir: "/app/images"
-insert_batch_size: 200
-insert_max_workers: 8
-
-knn:
-  k: 10
-  num_candidates: 100
+default:
+  SECRET_KEY: "production-secret-key"
+  DEBUG: false
+  ES_URL: "http://es:9200"
+  ES_INDEX_NAME: "inat-photos-index"
+  CLIP_MODEL_NAME: "clip-ViT-B-32"
+  MEDIAPIPE_HUMAN_DETECT_MODEL: "blaze_face_short_range.tflite"
+  HUMAN_EXCLUSION_THRESHOLD: 0.6
+  IMAGE_CACHE_DIR: "images/"
+  INSERT_BATCH_SIZE: 200
+  KNN:
+    K: 10
+    NUM_CANDIDATES: 100

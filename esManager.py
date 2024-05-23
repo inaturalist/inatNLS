@@ -7,9 +7,8 @@ logger.level = logging.DEBUG
 
 
 class ElasticSearchManager:
-    def __init__(self, host="localhost", port=9200):
-        self.es = Elasticsearch("http://localhost:9200")
-        # self.es = Elasticsearch([{'host': host, 'port': port}])
+    def __init__(self, url="http://localhost:9200"):
+        self.es = Elasticsearch(url)
         logger.info("Connected to Elasticsearch!")
 
     def delete_index(self, index_name):
