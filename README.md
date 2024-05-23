@@ -14,16 +14,13 @@
 1. build docker image
 `docker build . -t inaturalist/inatnls:latest`
 
-2. create .htpasswd file
-`htpasswd -c .htpasswd inat`
-
-3. run ES and Flask with docker compose
+2. run ES and Flask with docker compose
 `docker compose up -d`
 
-4. copy sample into the docker container
+3. copy sample into the docker container
 `docker cp complete_1k_obs_sample.csv inatnls:/app/complete_1k_obs_sample.csv`
 
-5. index sample data
+4. index sample data
 `docker exec -ti inatnls flask reindex complete_1k_obs_sample.csv`
 
-6. visit `localhost:5000` in your browser
+5. visit `localhost:5000` in your browser

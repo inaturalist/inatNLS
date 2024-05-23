@@ -1,6 +1,5 @@
 import click
 from flask import Flask, render_template, request
-from flask_htpasswd import HtPasswdAuth
 import yaml
 import logging
 from logging.handlers import RotatingFileHandler
@@ -51,18 +50,13 @@ def create_app():
     app.logger.addHandler(file_handler)
     app.logger.setLevel(logging.INFO)
 
-    app.config['FLASK_HTPASSWD_PATH'] = '.htpasswd'
-
-
     return app
 
 app = create_app()
-htpasswd = HtPasswdAuth(app)
 
 
 @app.get("/")
-@htpasswd.required
-def index(user):
+def index():
     return render_template(
         "index.html",
         continent_choices=continent_choices,
@@ -71,8 +65,7 @@ def index(user):
 
 
 @app.post("/")
-@htpasswd.required
-def handle_search(user):    
+def handle_search():    
     query = request.form.get("query", "")
     login = request.form.get("login", "")
     continent = request.form.get("continent", "")
