@@ -5,7 +5,6 @@ import logging
 from logging.handlers import RotatingFileHandler
 
 from config import Config
-from data import iconic_taxa, continent_choices
 from esManager import ElasticSearchManager
 from imageManager import ImageManager
 from ingestionServiceMultiThread import IngestionServiceMultiThread
@@ -60,34 +59,32 @@ app = create_app()
 def index():
     return render_template(
         "index.html",
-        continent_choices=continent_choices,
-        iconic_taxa=iconic_taxa,
     )
 
 
 @app.post("/")
 def handle_search():    
     query = request.form.get("query", "")
-    login = request.form.get("login", "")
-    continent = request.form.get("continent", "")
-    iconic_taxon = request.form.get("iconic_taxon", "")
+    taxon_id = request.form.get("taxon_id", "")
 
+    try:
+        taxon_id = int(taxon_id)
+    except ValueError:
+        taxon_id = None
+        
     results = app.search_service.perform_search(
-        query, login, continent, iconic_taxon
+        query, taxon_id
     )
 
-    return render_template(
-        "index.html",
-        query=query,
-        login=login,
-        continent=continent,
-        continent_choices=continent_choices,
-        iconic_taxon=iconic_taxon,
-        iconic_taxa=iconic_taxa,
-        results=results["hits"]["hits"],
-        from_=0,
-        total=results["hits"]["total"]["value"],
-    )
+    return [
+        {
+            "photo_id": hit["_source"]["photo_id"],
+            "score": hit["_score"],
+        }
+        for hit in results["hits"]["hits"]
+    ]
+
+
 
 @app.get("/status")
 def status():

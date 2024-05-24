@@ -10,15 +10,15 @@ class SearchService:
         self.embedding_model = embedding_model
         self.es_manager = es_manager
 
-    def perform_search(self, query, login, continent, iconic_taxon):
+    def perform_search(self, query, taxon_id):
         logger.info(
-            "search query: \"{}\" login: \"{}\" continent: \"{}\" iconic taxon: \"{}\"".format(
-                query, login, continent, iconic_taxon
+            "search query: \"{}\" taxon_id: \"{}\"".format(
+                query, taxon_id
             )
         )
         query_vector = self.embedding_model.get_embedding(query)
         filters = self.build_filters(
-            login, continent, iconic_taxon
+            taxon_id
         )
 
         results = self.es_manager.search(
@@ -36,15 +36,9 @@ class SearchService:
 
         return results
 
-    def build_filters(self, login, continent, iconic_taxon):
+    def build_filters(self, taxon_id):
         filters = {"filter": []}
-        if login:
+        if taxon_id:
             filters["filter"].append(
-                {"term": {"observer_login.keyword": {"value": login}}})
-        if continent and continent != "Worldwide":
-            filters["filter"].append(
-                {"term": {"continent.keyword": {"value": continent}}})
-        if iconic_taxon and iconic_taxon != "None":
-            filters["filter"].append(
-                {"prefix": {"ancestry.keyword": {"value": iconic_taxon}}})
+                {"term": {"taxon_ids": {"term": taxon_id}}})
         return filters
