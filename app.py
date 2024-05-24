@@ -98,5 +98,8 @@ def status():
 def reindex(filename):
     """Add new data to elasticsearch index."""
     app.ingestion_service.ingest_data(
-        filename, app.config["ES_INDEX_NAME"]
+        filename,
+        index_name=app.config.get("ES_INDEX_NAME"),
+        ingestion_batch_size=app.config.get("INSERT_BATCH_SIZE"),
+        ingestion_cap=app.config.get("INGESTION_CAP")
     )
