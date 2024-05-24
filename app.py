@@ -87,14 +87,18 @@ def handle_search():
     results = app.search_service.perform_search(
         page, per_page, query, taxon_id
     )
-
-    return [
-        {
-            "photo_id": hit["_source"]["photo_id"],
-            "score": hit["_score"],
-        }
-        for hit in results["hits"]["hits"]
-    ]
+    return {
+        "page": page,
+        "per_page": per_page,
+        "total_results": app.config["KNN"]["K"],
+        "results": [
+            {
+                "photo_id": hit["_source"]["photo_id"],
+                "score": hit["_score"],
+            }
+            for hit in results["hits"]["hits"]
+        ]
+    }
 
 
 
