@@ -9,8 +9,8 @@ default:
   IMAGE_CACHE_DIR: "images/"
   INSERT_BATCH_SIZE: 200
   KNN:
-    K: 10
-    NUM_CANDIDATES: 100
+    K: 1_000
+    NUM_CANDIDATES: 1_000
 
 development:
   SECRET_KEY: "dev-secret-key"

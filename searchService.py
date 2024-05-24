@@ -1,4 +1,5 @@
 import logging
+import datetime
 
 logger = logging.getLogger(__name__)
 logger.level = logging.DEBUG
@@ -10,7 +11,7 @@ class SearchService:
         self.embedding_model = embedding_model
         self.es_manager = es_manager
 
-    def perform_search(self, query, taxon_id):
+    def perform_search(self, page, per_page, query, taxon_id):
         logger.info(
             "search query: \"{}\" taxon_id: \"{}\"".format(
                 query, taxon_id
@@ -21,6 +22,7 @@ class SearchService:
             taxon_id
         )
 
+        before_query_timestamp = datetime.datetime.now()
         results = self.es_manager.search(
             index_name=self.config["ES_INDEX_NAME"],
             knn={
@@ -30,9 +32,12 @@ class SearchService:
                 "num_candidates": self.config["KNN"]["NUM_CANDIDATES"],
                 **filters,
             },
-            size=self.config["KNN"]["K"],
-            from_=0,
+            size=per_page,
+            from_=page * per_page,
         )
+        after_query_timestamp = datetime.datetime.now()
+        query_time = after_query_timestamp - before_query_timestamp
+        logging.info("query time was {}".format(query_time))
 
         return results
 

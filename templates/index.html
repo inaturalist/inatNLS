@@ -18,6 +18,21 @@
         </div>
     </div>
     <div class="form-group row">
+        <label for="page" class="col-sm-2 col-form-label">Page #</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" name="page" id="page" placeholder="Page" value="{{ page }}" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="per_page" class="col-sm-2 col-form-label">Per Page</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" name="per_page" id="per_page" placeholder="Per Page"
+                value="{{ per_page }}" />
+        </div>
+    </div>
+
+
+    <div class="form-group row">
         <div class="col-sm-10">
             <button type="submit" class="btn btn-primary">Search</button>
         </div>
@@ -25,36 +40,4 @@
 </form>
 
 <br />
-
-{% if results %}
-<div class="row mb-3">
-    {% for result in results %}
-    <div class="card" style="width: 12rem;">
-        <a href="https://www.inaturalist.org/observations/{{ result._source.observation_uuid }}">
-            <img src="https://inaturalist-open-data.s3.amazonaws.com/photos/{{ result._source.photo_id }}/small.{{ result._source.extension }}"
-                class="card-img-top img-responsive" alt="..."
-                style="width: 100%; max-height: 140px; object-fit: none; object-position: center;" />
-        </a>
-        <div class="card-body">
-            <small>
-                Taxon Name:
-                <a href="https://www.inaturalist.org/taxa/{{ result._source.taxon_id }}">
-                    {{ result._source.taxon_name }}
-                </a>
-                <br />
-                Photographer:
-                <a href="https://www.inaturalist.org/users/{{ result._source.observer_login }}">
-                    {{ result._source.observer_login }}
-                </a>
-                <br />
-                {% if result._score %}<i>(Score: {{ result._score }})</i>{% endif %}
-            </small>
-        </div>
-    </div>
-    {% endfor %}
-</div>
-</div>
-{% elif request.method == 'POST' %}
-<p>No results found.</p>
-{% endif %}
 {% endblock %}

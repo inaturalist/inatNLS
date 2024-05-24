@@ -63,17 +63,29 @@ def index():
 
 
 @app.post("/")
-def handle_search():    
-    query = request.form.get("query", "")
-    taxon_id = request.form.get("taxon_id", "")
+def handle_search():
+    query = request.values.get("query")
+    taxon_id = request.values.get("taxon_id")
+    page = request.values.get("page")
+    per_page = request.values.get("per_page")
 
     try:
         taxon_id = int(taxon_id)
     except ValueError:
         taxon_id = None
-        
+    
+    try:
+        page = int(page)
+    except ValueError:
+        page = 0
+
+    try:
+        per_page = int(per_page)
+    except ValueError:
+        per_page = 30
+
     results = app.search_service.perform_search(
-        query, taxon_id
+        page, per_page, query, taxon_id
     )
 
     return [
