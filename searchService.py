@@ -13,8 +13,8 @@ class SearchService:
 
     def perform_search(self, page, per_page, query, taxon_id):
         logger.info(
-            "search query: \"{}\" taxon_id: \"{}\"".format(
-                query, taxon_id
+            "search query: \'{}\' taxon_id: \'{}\' page: \'{}\' per_page: \'{}\'".format(
+                query, taxon_id, page, per_page
             )
         )
         query_vector = self.embedding_model.get_embedding(query)
