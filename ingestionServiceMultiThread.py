@@ -28,7 +28,9 @@ class IngestionServiceMultiThread:
         try:
             # exclude photos where we can find a human face
             if self.human_detection_model.detect_faces(local_path):
-                logger.info("detected human face in {} above threshold, skipping.".format(local_path))
+                logger.info("detected human face in {} above threshold, skipping.".format(
+                    local_path)
+                )
                 return None
 
             img = self.image_manager.open_image(local_path)
@@ -75,7 +77,7 @@ class IngestionServiceMultiThread:
                 if result:
                     docs.append(result)
                     pbar.update(1)  # Update progress bar for each successful operation
-            
+
             self.es_manager.bulk_insert(
                 index_name=index_name, documents=docs
             )
@@ -104,6 +106,6 @@ class IngestionServiceMultiThread:
                     batch = []
 
         # insert anything at the end
-        response = self.insert_documents(index_name, batch, pbar)
+        self.insert_documents(index_name, batch, pbar)
 
         pbar.close()

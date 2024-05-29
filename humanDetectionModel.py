@@ -1,11 +1,13 @@
 import logging
 
+
 import mediapipe as mp
-from mediapipe.tasks import python
-from mediapipe.tasks.python import vision
+from mediapipe.tasks import python              # noqa: F401
+from mediapipe.tasks.python import vision       # noqa: F401
 
 logger = logging.getLogger(__name__)
 logger.level = logging.DEBUG
+
 
 class HumanDetectionModel:
     def __init__(self, model_path, threshold):
@@ -28,7 +30,9 @@ class HumanDetectionModel:
 
         for detection in detection_result.detections:
             for category in detection.categories:
-                logger.info("possible human face in {} with score {}".format(image_path, category.score))
+                logger.info(
+                    "possible human face in {} with score {}".format(image_path, category.score)
+                )
                 if category.score > self.threshold:
                     return True
 

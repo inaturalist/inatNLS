@@ -77,7 +77,7 @@ def handle_search():
             taxon_id = int(taxon_id)
         except ValueError:
             taxon_id = None
-    
+
     page = request.values.get("page", 0)
     try:
         page = int(page)

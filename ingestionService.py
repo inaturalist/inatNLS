@@ -1,4 +1,3 @@
-import csv
 import logging
 import os
 
@@ -33,11 +32,11 @@ class IngestionService:
         # convert ancestry to a list of taxon ids
         df["ancestry_list"] = df.ancestry.str.split("/")
         df["summed_ancestry_list"] = df.groupby("photo_id").ancestry_list.sum()
-        photos_with_ancestries = (df
+        photos_with_ancestries = (
+            df
             .groupby(["photo_id", "extension", "taxon_id"])
             .ancestry_list.sum()
         )
-      
         docs = []
         num_ingested = 0
         for ((photo_id, extension, taxon_id), ancestry_items) in photos_with_ancestries.items():
@@ -51,13 +50,12 @@ class IngestionService:
             ancestry_items = list(set(ancestry_items))
             ancestry_items = [x for x in ancestry_items if x != 48460]
             taxon_ids = ancestry_items + [taxon_id]
-            
+
             local_path = self.image_manager.path_for_photo_id(photo_id)
-            photo_url = self.image_manager.url_for_photo_id(photo_id, extension)
 
             if not os.path.exists(local_path):
                 continue
-                
+
             try:
                 # exclude photos where we can find a human face
                 if self.human_detection_model.detect_faces(local_path):
@@ -66,7 +64,6 @@ class IngestionService:
 
                 img = self.image_manager.open_image(local_path)
                 img_emb = self.embedding_model.get_embedding(img)
-                
                 document = {
                     "photo_id": photo_id,
                     "taxon_ids": taxon_ids,
