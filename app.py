@@ -1,6 +1,5 @@
 import click
 from flask import Flask, render_template, request
-import yaml
 import logging
 from logging.handlers import RotatingFileHandler
 
@@ -12,6 +11,7 @@ from ingestionService import IngestionService
 from embeddingModel import EmbeddingModel
 from searchService import SearchService
 from humanDetectionModel import HumanDetectionModel
+
 
 def create_app():
     app = Flask(__name__)
@@ -44,13 +44,18 @@ def create_app():
     app.ingestion_service = ingestion_service
 
     # Create logger
-    file_handler = RotatingFileHandler('./logs/search.log', maxBytes=1024 * 1024 * 100, backupCount=10)
+    file_handler = RotatingFileHandler(
+        './logs/search.log',
+        maxBytes=1024 * 1024 * 100,
+        backupCount=10
+    )
     formatter = logging.Formatter('[%(asctime)s]%(message)s')
     file_handler.setFormatter(formatter)
     app.logger.addHandler(file_handler)
     app.logger.setLevel(logging.INFO)
 
     return app
+
 
 app = create_app()
 
@@ -101,10 +106,10 @@ def handle_search():
     }
 
 
-
 @app.get("/status")
 def status():
-    return "nls-demo OK" 
+    return "nls-demo OK"
+
 
 @app.cli.command()
 @click.argument("filename", required=True)
