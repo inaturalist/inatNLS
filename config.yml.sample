@@ -11,6 +11,7 @@ default:
   KNN:
     K: 1_000
     NUM_CANDIDATES: 1_000
+  PER_PAGE_DEFAULT: 30
 
 development:
   SECRET_KEY: "dev-secret-key"
