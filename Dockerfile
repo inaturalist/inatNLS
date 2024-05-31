@@ -5,7 +5,7 @@ WORKDIR /app
 RUN apt-get update -qq && apt-get install -y libgl1-mesa-glx
 
 RUN mkdir /app/images
-RUN mkdir /app/logs
+RUN mkdir /app/log
 
 COPY requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt

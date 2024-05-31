@@ -21,9 +21,8 @@ services:
     ports:
       - 80:5000
     volumes:
-      - .htpasswd:/app/.htpasswd
       - app_images_data:/app/images
-      - ./logs:/app/logs
+      - ./log:/app/log
 
 volumes:
   es_data:

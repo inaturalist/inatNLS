@@ -43,13 +43,13 @@ def create_app():
     app.search_service = search_service
     app.ingestion_service = ingestion_service
 
-    # Create logger
+    # Create app logger
     file_handler = RotatingFileHandler(
-        './logs/search.log',
+        './log/app.log',
         maxBytes=1024 * 1024 * 100,
         backupCount=10
     )
-    formatter = logging.Formatter('[%(asctime)s]%(message)s')
+    formatter = logging.Formatter('[%(asctime)s] %(message)s')
     file_handler.setFormatter(formatter)
     app.logger.addHandler(file_handler)
     app.logger.setLevel(logging.INFO)
@@ -84,11 +84,11 @@ def handle_search():
     except ValueError:
         page = 0
 
-    per_page = request.values.get("per_page", app.config.get("RESULTS_PER_PAGE_DEFAULT"))
+    per_page = request.values.get("per_page", app.config.get("PER_PAGE_DEFAULT"))
     try:
         per_page = int(per_page)
     except ValueError:
-        per_page = app.config.get("RESULTS_PER_PAGE_DEFAULT")
+        per_page = app.config.get("PER_PAGE_DEFAULT")
 
     results = app.search_service.perform_search(
         page, per_page, query, taxon_id
