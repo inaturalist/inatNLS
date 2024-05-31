@@ -8,7 +8,7 @@ logger.level = logging.DEBUG
 
 class ElasticSearchManager:
     def __init__(self, url="http://localhost:9200"):
-        self.es = Elasticsearch(url, timeout=30)
+        self.es = Elasticsearch(url, timeout=60)
         logger.info("Connected to Elasticsearch!")
 
     def delete_index(self, index_name):
