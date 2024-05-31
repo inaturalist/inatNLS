@@ -45,10 +45,34 @@ class SearchService:
         return results
 
     def build_filters(self, taxon_id):
-        filters = {"filter": []}
+        filters = { "filter": [ ] }
+
+        excluded_taxon_ids = self.config.get("EXCLUDED_TAXON_IDS", [])
+        if len(excluded_taxon_ids) > 0:
+            exclude_terms = { 
+                "terms": {
+                    "taxon_ids": excluded_taxon_ids 
+                } 
+            } 
+        
+            filters["filter"].append(
+                {
+                    "bool": {
+                        "must_not": exclude_terms
+                    }
+                },
+            )
+        
         if taxon_id:
             filters["filter"].append(
-                {"term": {"taxon_ids": {"term": taxon_id}}})
+                {
+                    "term": {
+                        "taxon_ids": {
+                            "term": taxon_id
+                        }
+                    }
+                }
+            )
         return filters
 
     def write_logstash(self, query, taxon_id, page, per_page, start_datetime, query_time):
