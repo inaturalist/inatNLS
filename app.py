@@ -1,5 +1,5 @@
 import click
-from flask import Flask, render_template, request
+from flask import Flask, render_template, abort, request
 import logging
 from logging.handlers import RotatingFileHandler
 
@@ -69,43 +69,46 @@ def index():
 
 @app.post("/")
 def handle_search():
-    query = request.values.get("query", "")
+    try:
+        query = request.values.get("query", "")
 
-    taxon_id = request.values.get("taxon_id", None)
-    if taxon_id is not None:
+        taxon_id = request.values.get("taxon_id", None)
+        if taxon_id is not None:
+            try:
+                taxon_id = int(taxon_id)
+            except ValueError:
+                taxon_id = None
+
+        page = request.values.get("page", 0)
         try:
-            taxon_id = int(taxon_id)
+            page = int(page)
         except ValueError:
-            taxon_id = None
+            page = 0
 
-    page = request.values.get("page", 0)
-    try:
-        page = int(page)
-    except ValueError:
-        page = 0
+        per_page = request.values.get("per_page", app.config.get("PER_PAGE_DEFAULT"))
+        try:
+            per_page = int(per_page)
+        except ValueError:
+            per_page = app.config.get("PER_PAGE_DEFAULT")
 
-    per_page = request.values.get("per_page", app.config.get("PER_PAGE_DEFAULT"))
-    try:
-        per_page = int(per_page)
-    except ValueError:
-        per_page = app.config.get("PER_PAGE_DEFAULT")
-
-    results = app.search_service.perform_search(
-        page, per_page, query, taxon_id
-    )
-    return {
-        "page": page,
-        "per_page": per_page,
-        "total_results": app.config["KNN"]["K"],
-        "results": [
-            {
-                "photo_id": hit["_source"]["photo_id"],
-                "score": hit["_score"],
-            }
-            for hit in results["hits"]["hits"]
-        ]
-    }
-
+        results = app.search_service.perform_search(
+            page, per_page, query, taxon_id
+        )
+        return {
+            "page": page,
+            "per_page": per_page,
+            "total_results": app.config["KNN"]["K"],
+            "results": [
+                {
+                    "photo_id": hit["_source"]["photo_id"],
+                    "score": hit["_score"],
+                }
+                for hit in results["hits"]["hits"]
+            ]
+        }
+    except Exception as e:
+        app.logger.error(f"An error occurred: {e}")
+        abort(500, description="Internal Server Error")
 
 @app.get("/status")
 def status():
