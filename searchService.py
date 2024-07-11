@@ -12,17 +12,17 @@ class SearchService:
         self.embedding_model = embedding_model
         self.es_manager = es_manager
 
-    def perform_search(self, page, per_page, query, taxon_id):
+    def perform_search(self, page, per_page, query, taxon_id, normalize_vectors=False):
         before_query_timestamp = datetime.datetime.now()
         logger.info(
             "search query: \'{}\' taxon_id: \'{}\' page: \'{}\' per_page: \'{}\'".format(
                 query, taxon_id, page, per_page
             )
         )
-        query_vector = self.embedding_model.get_embedding(query)
-        filters = self.build_filters(
-            taxon_id
+        query_vector = self.embedding_model.get_embedding(
+            query, normalize_vectors=normalize_vectors
         )
+        filters = self.build_filters(taxon_id)
 
         results = self.es_manager.search(
             index_name=self.config["ES_INDEX_NAME"],

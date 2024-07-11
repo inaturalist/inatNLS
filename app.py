@@ -1,5 +1,5 @@
 import click
-from flask import Flask, render_template, abort, request
+from flask import Flask, render_template, abort, request, jsonify
 import logging
 from logging.handlers import RotatingFileHandler
 
@@ -92,23 +92,34 @@ def handle_search():
             per_page = app.config.get("PER_PAGE_DEFAULT")
 
         results = app.search_service.perform_search(
-            page, per_page, query, taxon_id
+            page,
+            per_page,
+            query,
+            taxon_id,
+            normalize_vectors=app.config.get("NORMALIZE_VECTORS"),
         )
-        return {
-            "page": page,
-            "per_page": per_page,
-            "total_results": app.config["KNN"]["K"],
-            "results": [
-                {
-                    "photo_id": hit["_source"]["photo_id"],
-                    "score": hit["_score"],
-                }
-                for hit in results["hits"]["hits"]
-            ]
-        }
+        response = jsonify(
+            {
+                "page": page,
+                "per_page": per_page,
+                "total_results": app.config["KNN"]["K"],
+                "results": [
+                    {
+                        "photo_id": hit["_source"]["photo_id"],
+                        "score": hit["_score"],
+                    }
+                    for hit in results["hits"]["hits"]
+                ],
+            }
+        )
+        if app.config.get("DEBUG"):
+            response.headers.add("Access-Control-Allow-Origin", "*")
+        return response
+
     except Exception as e:
         app.logger.error(f"An error occurred: {e}")
         abort(500, description="Internal Server Error")
+
 
 @app.get("/status")
 def status():
@@ -123,5 +134,6 @@ def reindex(filename):
         filename,
         index_name=app.config.get("ES_INDEX_NAME"),
         ingestion_batch_size=app.config.get("INSERT_BATCH_SIZE"),
-        ingestion_cap=app.config.get("INGESTION_CAP")
+        ingestion_cap=app.config.get("INGESTION_CAP"),
+        normalize_vectors=app.config.get("NORMALIZE_VECTORS"),
     )
