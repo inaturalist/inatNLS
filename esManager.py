@@ -23,7 +23,7 @@ class ElasticSearchManager:
                         "type": "dense_vector",
                         "index": True,
                         "similarity": "cosine",
-                        "dims": 512
+                        "dims": 1152
                     }
                 }
             },

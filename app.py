@@ -8,7 +8,7 @@ from esManager import ElasticSearchManager
 from imageManager import ImageManager
 from ingestionServiceMultiThread import IngestionServiceMultiThread
 from ingestionService import IngestionService
-from embeddingModel import EmbeddingModel
+from embeddingModel import SiglipEmbeddingModel
 from searchService import SearchService
 from humanDetectionModel import HumanDetectionModel
 
@@ -18,7 +18,7 @@ def create_app():
     app_config = Config.load_config()
     app.config.update(app_config)
 
-    embedding_model = EmbeddingModel(
+    embedding_model = SiglipEmbeddingModel(
         app.config["CLIP_MODEL_NAME"]
     )
     es_manager = ElasticSearchManager(url=app.config["ES_URL"])
@@ -119,6 +119,7 @@ def status():
 @click.argument("filename", required=True)
 def reindex(filename):
     """Add new data to elasticsearch index."""
+    print(f"reindexing {filename}")
     app.ingestion_service.ingest_data(
         filename,
         index_name=app.config.get("ES_INDEX_NAME"),
